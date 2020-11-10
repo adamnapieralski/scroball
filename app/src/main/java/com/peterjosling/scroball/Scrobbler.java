@@ -82,6 +82,10 @@ public class Scrobbler {
     // Generate one scrobble per played period.
     Track track = playbackItem.getTrack();
 
+    if (!track.isValid()) {
+      return;
+    }
+
     if (!track.duration().isPresent()) {
       fetchTrackDurationAndSubmit(playbackItem);
       return;
