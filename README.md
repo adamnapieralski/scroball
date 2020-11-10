@@ -15,3 +15,6 @@ Scroball is a lightweight scrobbler for Last.fm which can track music playback f
 - Tidal
 - Amazon Music
 - And many more...
+
+### Customized forked version - Radio Nowy Świat
+Added preliminary support for correct handling specific media data format from [Radio Nowy Świat Android app](https://play.google.com/store/apps/details?id=com.thehouseofcode.radio_nowy_swiat).
