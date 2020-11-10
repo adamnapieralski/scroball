@@ -38,10 +38,6 @@ public class PlaybackTracker {
     Track track =
         metadataTransformers.transformForPackageName(player, Track.fromMediaMetadata(metadata));
 
-    if (!track.isValid()) {
-      return;
-    }
-
     PlayerState playerState = getOrCreatePlayerState(player);
     playerState.setTrack(track);
   }

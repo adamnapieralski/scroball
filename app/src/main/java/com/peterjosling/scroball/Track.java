@@ -8,6 +8,9 @@ import com.google.common.base.Optional;
 import com.peterjosling.scroball.transforms.TitleExtractor;
 
 import java.io.Serializable;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @AutoValue
 public abstract class Track implements Serializable {
@@ -41,16 +44,39 @@ public abstract class Track implements Serializable {
     Bitmap art = metadata.getBitmap(MediaMetadata.METADATA_KEY_ART);
     long duration = metadata.getLong(MediaMetadata.METADATA_KEY_DURATION);
 
+    final String titleNowySwiat = "Radio Nowy Świat - Pion i poziom!";
+    final String artistNowySwiat = "Radio Nowy Świat";
+
+    boolean isNowySwiat = false;
+
+    if (Objects.equals(artist, artistNowySwiat)) {
+      isNowySwiat = true;
+      artist = "";
+    }
+
     if (title == null) {
       title = metadata.getString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE);
+    }
 
-      if (title == null) {
-        title = "";
+    if (title == null || Objects.equals(title, titleNowySwiat)) {
+      title = "";
+    } else if (isNowySwiat) {
+      Pattern nowySwiatTitleArtistPattern = Pattern.compile("^(.*) - (.*)$");
+      Matcher nowySwiatMatcher = nowySwiatTitleArtistPattern.matcher(title);
+      if (nowySwiatMatcher.find()) {
+        artist = nowySwiatMatcher.group(1);
+        title = nowySwiatMatcher.group(2);
+      } else {
+        title = titleNowySwiat;
       }
     }
 
     if (art == null) {
       art = metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
+    }
+
+    if (isNowySwiat) {
+      art = null;
     }
 
     Track.Builder builder = Track.builder().track(title);
@@ -73,7 +99,7 @@ public abstract class Track implements Serializable {
     if (art != null) {
       builder.art(art);
     }
-    if (artist != null) {
+    if (artist != null ) {
       builder.artist(artist);
     } else if (albumArtist != null) {
       // Some apps (Telegram) set ALBUM_ARTIST but not ARTIST.
