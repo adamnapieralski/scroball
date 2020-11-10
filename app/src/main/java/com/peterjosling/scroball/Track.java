@@ -99,7 +99,7 @@ public abstract class Track implements Serializable {
     if (art != null) {
       builder.art(art);
     }
-    if (artist != null ) {
+    if (artist != null) {
       builder.artist(artist);
     } else if (albumArtist != null) {
       // Some apps (Telegram) set ALBUM_ARTIST but not ARTIST.
